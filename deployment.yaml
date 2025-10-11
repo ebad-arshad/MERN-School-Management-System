@@ -24,7 +24,6 @@ spec:
         env:
         - name: REACT_APP_BASE_URL
           value: "/api"
-
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -51,4 +50,4 @@ spec:
         - containerPort: 5000
         env:
         - name: MONGO_URL
-          value: "mongodb://root:password@mongo:27017/"
+          value: "mongodb://root:password@mongo:27017/school?authSource=admin"

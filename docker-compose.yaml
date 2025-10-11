@@ -8,16 +8,12 @@ services:
     networks:
       - school-net
     restart: always
-    environment:
-      - REACT_APP_BASE_URL=/api
   school-backend:
     image: school-backend
     container_name: school-backend
     build: ./backend/
     networks:
       - school-net
-    environment:
-      - MONGO_URL=mongodb://root:password@mongo:27017/
     restart: always
     depends_on:
       mongo:
@@ -28,10 +24,6 @@ services:
     networks:
       - school-net
     restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=password
-      - MONGO_INITDB_DATABASE=db
     healthcheck:
       test: [ "CMD", "mongosh", "--eval", "db.adminCommand('ping')" ]
       interval: 10s

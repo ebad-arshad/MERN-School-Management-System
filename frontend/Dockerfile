@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY ./package*.json /app/
 
+COPY .env ./
+
 RUN npm ci
 
 COPY . .
