@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: school-frontend
+  namespace: smp
+  # tier: frontend
+  labels:
+    app: school-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: school-frontend
+  template:
+    metadata:
+      labels:
+        app: school-frontend
+    spec:
+      containers:
+      - name: school-frontend
+        image: ebadarshad/school-frontend:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: REACT_APP_BASE_URL
+          value: "/api"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: school-backend
+  namespace: smp
+  # tier: backend
+  labels:
+    app: school-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: school-backend
+  template:
+    metadata:
+      labels:
+        app: school-backend
+    spec:
+      containers:
+      - name: school-backend
+        image: ebadarshad/school-backend:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URL
+          value: "mongodb://root:password@mongo:27017/"
