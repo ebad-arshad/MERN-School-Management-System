@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: school-frontend
   namespace: smp
-  # tier: frontend
   labels:
     app: school-frontend
 spec:
@@ -21,16 +20,12 @@ spec:
         image: ebadarshad/school-frontend:latest
         ports:
         - containerPort: 80
-        env:
-        - name: REACT_APP_BASE_URL
-          value: "/api"
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: school-backend
   namespace: smp
-  # tier: backend
   labels:
     app: school-backend
 spec:
@@ -50,4 +45,7 @@ spec:
         - containerPort: 5000
         env:
         - name: MONGO_URL
-          value: "mongodb://root:password@mongo:27017/school?authSource=admin"
+          valueFrom:
+            secretKeyRef:
+              name: database
+              key: url
