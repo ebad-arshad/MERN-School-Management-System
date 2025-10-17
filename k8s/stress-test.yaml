@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: backend-stress-test
+  namespace: smp
+  labels:
+    app: stress-test
+spec:
+  restartPolicy: Never
+  containers:
+  - name: stress-tester
+    image: alpine/bombardier
+    command: ["bombardier"]
+    args: ["-c", "1000", "-d", "10m", "-l", "http://school-backend:5000/api/"]
