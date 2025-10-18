@@ -1,19 +1,21 @@
+@Library('shared') _
+
 pipeline {
-    agent { label "slave" }
+    agent { label 'slave' }
 
     stages {
         stage('Clone') {
             steps {
-                echo 'This is clone stage'
-                git url:"https://github.com/ebad-arshad/MERN-School-Management-System", branch:"main"
-                echo 'Cloned successfully'
+                script {
+                    clone('https://github.com/ebad-arshad/MERN-School-Management-System', 'main')
+                }
             }
         }
         stage('Login DockerHub') {
             steps {
-                echo 'This is Dockerhub login stage'
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                  sh 'docker login -u $USERNAME -p $PASSWORD'
+                script {
+                    dockerhub_login('docker-hub-creds')
+                }
                 }
                 echo 'Login to Dockerhub'
             }
@@ -37,11 +39,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'This is deploy stage'
-                sh "docker compose down"
-                sh "docker compose up --build -d"
+                sh 'docker compose down'
+                sh 'docker compose up --build -d'
                 echo 'Deployment completed'
             }
         }
-        
-    }
 }
