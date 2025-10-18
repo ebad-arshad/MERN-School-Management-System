@@ -7,7 +7,6 @@ pipeline {
                 echo 'This is code stage'
                 git url:"https://github.com/ebad-arshad/MERN-School-Management-System", branch:"main"
                 echo 'Cloned successfully'
-                echo 'hello test'
             }
         }
         stage('Login DockerHub') {
