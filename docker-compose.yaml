@@ -1,6 +1,6 @@
 services:
   school-frontend:
-    image: school-frontend
+    image: ebadarshad/school-frontend:latest
     container_name: school-frontend
     build: ./frontend/
     ports:
@@ -12,7 +12,7 @@ services:
       - REACT_APP_BASE_URL=/api
 
   school-backend:
-    image: school-backend
+    image: ebadarshad/school-backend:latest
     container_name: school-backend
     build: ./backend/
     networks:
