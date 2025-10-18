@@ -16,8 +16,6 @@ pipeline {
                 script {
                     dockerhub_login('docker-hub-creds')
                 }
-                }
-                echo 'Login to Dockerhub'
             }
         }
         stage('Build') {
@@ -44,4 +42,5 @@ pipeline {
                 echo 'Deployment completed'
             }
         }
+    }
 }
