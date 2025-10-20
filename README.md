@@ -206,7 +206,7 @@ The project includes a complete Kubernetes setup under `/k8s`:
 **Ebad Arshad**  
 📍 DevOps Engineer | Docker | Jenkins | Kubernetes | CI/CD  
 🔗 [GitHub Profile](https://github.com/ebad-arshad)  
-📫 Connect on [LinkedIn](https://linkedin.com/in/ebadarshad)
+📫 Connect on [LinkedIn](https://linkedin.com/in/ebad-arshad)
 
 ---
 
