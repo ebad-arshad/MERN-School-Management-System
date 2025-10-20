@@ -96,22 +96,10 @@ cd MERN-School-Management-System
 
 ---
 
-### ⚡ Step 2: Configure Environment Variables
-
-Create a `.env` file in the project root (or inside `/backend`) with:
+### ⚡ Step 2: Build and Run with Docker Compose
 
 ```bash
-MONGO_URI=mongodb://mongo:27017/school_db
-PORT=5000
-JWT_SECRET=your_secret_key
-```
-
----
-
-### ⚡ Step 3: Build and Run with Docker Compose
-
-```bash
-docker-compose up --build
+docker-compose up --build -d
 ```
 
 This command will:
@@ -121,12 +109,10 @@ This command will:
 
 ---
 
-### ⚡ Step 4: Access the Application
+### ⚡ Step 3: Access the Application
 
 Once containers are running:
-- 🌐 Frontend: [http://localhost:3000](http://localhost:3000)
-- ⚙️ Backend API: [http://localhost:5000](http://localhost:5000)
-- 🗄 MongoDB: accessible internally via `mongo:27017`
+- 🌐 Frontend: [http://localhost:80](http://localhost:80)
 
 To stop the containers:
 ```bash
@@ -140,42 +126,48 @@ docker-compose down
 The `Jenkinsfile` automates your complete CI/CD workflow:
 
 ```groovy
-pipeline {
-    agent any
+@Library('shared') _
 
-    environment {
-        DOCKER_IMAGE = "ebadarshad/mern-school-management"
-    }
+pipeline {
+    agent { label 'slave' }
 
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                git 'https://github.com/ebad-arshad/MERN-School-Management-System.git'
+                script {
+                    clone('https://github.com/ebad-arshad/MERN-School-Management-System', 'main')
+                }
             }
         }
-
-        stage('Build & Test') {
+        stage('Login DockerHub') {
             steps {
-                sh 'npm install --prefix backend && npm test --prefix backend'
+                script {
+                    dockerhub_login('docker-hub-creds')
+                }
             }
         }
-
-        stage('Docker Build & Push') {
+        stage('Build') {
             steps {
-                sh '''
-                docker build -t $DOCKER_IMAGE:$BUILD_NUMBER .
-                docker login -u $DOCKER_USER -p $DOCKER_PASS
-                docker push $DOCKER_IMAGE:$BUILD_NUMBER
-                '''
+                echo 'This is build stage'
+                sh 'cd frontend && docker build -t ebadarshad/school-frontend:latest .'
+                sh 'cd backend && docker build -t ebadarshad/school-backend:latest .'
+                echo 'Build images successful'
             }
         }
-
-        stage('Deploy to Kubernetes') {
+        stage('Push image to DockerHub') {
             steps {
-                sh '''
-                kubectl apply -f k8s/
-                kubectl rollout status deployment/backend
-                '''
+                echo 'This is Dockerhub image push stage'
+                sh 'docker push ebadarshad/school-frontend:latest'
+                sh 'docker push ebadarshad/school-backend:latest'
+                echo 'Pushed image to Dockerhub'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'This is deploy stage'
+                sh 'docker compose down'
+                sh 'docker compose up --build -d'
+                echo 'Deployment completed'
             }
         }
     }
@@ -183,7 +175,7 @@ pipeline {
 ```
 
 ✅ Automatically triggers when you push to GitHub  
-✅ Builds, tests, and pushes Docker images to Docker Hub  
+✅ Builds, and pushes Docker images to Docker Hub  
 ✅ Deploys the latest version to Kubernetes  
 
 ---
@@ -197,14 +189,6 @@ The project includes a complete Kubernetes setup under `/k8s`:
 - `ingress.yaml` — Routes external traffic
 - `hpa.yaml` — Enables autoscaling based on CPU usage
 - `mongo-pv.yaml` — Persistent volume for MongoDB data
-
-### Run on Minikube
-
-```bash
-minikube start
-kubectl apply -f k8s/
-minikube service frontend-service
-```
 
 ---
 
