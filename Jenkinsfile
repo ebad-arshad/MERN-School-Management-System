@@ -47,11 +47,11 @@ pipeline {
                 echo 'Build images successful'
             }
         }
-        // stage('Security Scan with Trivy') {
-        //     steps {
-        //         sh 'trivy image ebadarshad/school-frontend:latest'
-        //     }
-        // }
+        stage('Security Scan with Trivy') {
+            steps {
+                sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --format json -o trivy-report.json ebadarshad/school-frontend:${env.IMAGE_TAG}"
+            }
+        }
         stage('Push image to DockerHub') {
             steps {
                 echo 'This is Dockerhub image push stage'
