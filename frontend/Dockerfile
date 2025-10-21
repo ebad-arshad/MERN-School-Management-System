@@ -6,13 +6,15 @@ COPY ./package*.json /app/
 
 COPY .env ./
 
-RUN npm ci
+RUN npm install
 
 COPY . .
 
 RUN npm run build
 
 FROM nginx:alpine
+
+RUN apk update && apk upgrade pcre2
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
