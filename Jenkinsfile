@@ -21,7 +21,7 @@ pipeline {
                     def imageTag = "${majorVersion}.${formattedMinor}"
 
                     // Store in environment variable
-                    env.IMAGE_TAG = imageTag
+                    env.IMAGE_TAG = imageTag.toString()
                 }
             }
         }
@@ -42,8 +42,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'This is build stage'
-                sh 'cd frontend && docker build -t ebadarshad/school-frontend:${env.IMAGE_TAG} .'
-                sh 'cd backend && docker build -t ebadarshad/school-backend:${env.IMAGE_TAG} .'
+                sh "docker build -t ebadarshad/school-frontend:${env.IMAGE_TAG} ./frontend"
+                sh "docker build -t ebadarshad/school-backend:${env.IMAGE_TAG} ./backend"
                 echo 'Build images successful'
             }
         }
@@ -55,8 +55,8 @@ pipeline {
         stage('Push image to DockerHub') {
             steps {
                 echo 'This is Dockerhub image push stage'
-                sh 'docker push ebadarshad/school-frontend:${env.IMAGE_TAG}'
-                sh 'docker push ebadarshad/school-backend:${env.IMAGE_TAG}'
+                sh "docker push ebadarshad/school-frontend:${env.IMAGE_TAG}"
+                sh "docker push ebadarshad/school-backend:${env.IMAGE_TAG}"
                 echo 'Pushed image to Dockerhub'
             }
         }
@@ -64,7 +64,7 @@ pipeline {
             steps {
                 echo 'This is deploy stage'
                 sh 'docker compose down'
-                sh 'APP_VERSION=${env.IMAGE_TAG} docker compose up --build -d'
+                sh "APP_VERSION=${env.IMAGE_TAG} docker compose up --build -d"
                 echo "Deployed version: ${env.IMAGE_TAG}"
             }
         }

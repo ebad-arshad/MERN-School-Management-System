@@ -6,7 +6,7 @@ COPY ./package*.json /app/
 
 COPY .env ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
