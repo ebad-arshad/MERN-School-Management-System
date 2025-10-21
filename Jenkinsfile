@@ -50,6 +50,8 @@ pipeline {
         stage('Security Scan with Trivy') {
             steps {
                 sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --format json -o trivy-report.json ebadarshad/school-frontend:${env.IMAGE_TAG}"
+                sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --format json -o trivy-report.json ebadarshad/school-backend:${env.IMAGE_TAG}"
+                archiveArtifacts artifacts: 'trivy-report.json', fingerprint: true
             }
         }
         stage('Push image to DockerHub') {
