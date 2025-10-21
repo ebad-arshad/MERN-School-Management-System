@@ -9,17 +9,17 @@ pipeline {
                 script {
                     // Get current build number
                     def buildNumber = env.BUILD_NUMBER.toInteger()
-                    
+
                     // Calculate major and minor versions
-                    def majorVersion = Math.floor(buildNumber / 50)
+                    def majorVersion = (buildNumber / 50).intValue()
                     def minorVersion = buildNumber % 50
-                    
+
                     // Format minor version with leading zero if needed
-                    def formattedMinor = String.format("%02d", minorVersion)
-                    
+                    def formattedMinor = String.format('%02d', minorVersion)
+
                     // Create the tag
                     def imageTag = "${majorVersion}.${formattedMinor}"
-                    
+
                     // Store in environment variable
                     env.IMAGE_TAG = imageTag
                 }
