@@ -65,8 +65,23 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'This is deploy stage'
-                sh 'docker compose down'
-                sh "APP_VERSION=${env.IMAGE_TAG} docker compose up --build -d"
+                // sh 'docker compose down'
+                // sh "APP_VERSION=${env.IMAGE_TAG} docker compose up --build -d"
+                sh """
+                cd ./k8s 
+                kubectl apply -f namespace.yaml
+                kubectl apply -f secret.yaml
+                kubectl apply -f pv.yaml
+                kubectl apply -f pvc.yaml
+                kubectl apply -f service.yaml
+                kubectl apply -f hpa.yaml
+                kubectl apply -f statefulset.yaml
+                kubectl apply -f deployment.yaml 
+
+                Thread.sleep(10000)
+
+                kubectl port-forward svc/school-frontend -n smp 80:80 --address=0.0.0.0 &               
+                """
                 echo "Deployed version: ${env.IMAGE_TAG}"
             }
         }
