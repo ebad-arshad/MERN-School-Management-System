@@ -176,7 +176,7 @@ pipeline {
 
 ✅ Automatically triggers when you push to GitHub  
 ✅ Builds, and pushes Docker images to Docker Hub  
-✅ Deploys the latest version to Kubernetes  
+✅ Deploys the latest version of Docker Image
 
 ---
 
