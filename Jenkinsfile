@@ -1,7 +1,7 @@
 @Library('shared') _
 
 pipeline {
-    agent { label 'slave' }
+    agent { label 'any' }
 
     stages {
         // stage('Version Calculation') {
