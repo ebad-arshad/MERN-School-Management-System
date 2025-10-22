@@ -1,7 +1,7 @@
 @Library('shared') _
 
 pipeline {
-    agent { label 'ebad' }
+    agent any
 
     stages {
         // stage('Version Calculation') {
