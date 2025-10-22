@@ -4,85 +4,85 @@ pipeline {
     agent { label 'slave' }
 
     stages {
-        stage('Version Calculation') {
-            steps {
-                script {
-                    // Get current build number
-                    def buildNumber = env.BUILD_NUMBER.toInteger()
+        // stage('Version Calculation') {
+        //     steps {
+        //         script {
+        //             // Get current build number
+        //             def buildNumber = env.BUILD_NUMBER.toInteger()
 
-                    // Calculate major and minor versions
-                    def majorVersion = (buildNumber / 50).intValue()
-                    def minorVersion = buildNumber % 50
+        //             // Calculate major and minor versions
+        //             def majorVersion = (buildNumber / 50).intValue()
+        //             def minorVersion = buildNumber % 50
 
-                    // Format minor version with leading zero if needed
-                    def formattedMinor = String.format('%02d', minorVersion)
+        //             // Format minor version with leading zero if needed
+        //             def formattedMinor = String.format('%02d', minorVersion)
 
-                    // Create the tag
-                    def imageTag = "${majorVersion}.${formattedMinor}"
+        //             // Create the tag
+        //             def imageTag = "${majorVersion}.${formattedMinor}"
 
-                    // Store in environment variable
-                    env.IMAGE_TAG = imageTag.toString()
-                }
-            }
-        }
-        stage('Clone') {
-            steps {
-                script {
-                    clone('https://github.com/ebad-arshad/MERN-School-Management-System', 'main')
-                }
-            }
-        }
-        stage('Login DockerHub') {
-            steps {
-                script {
-                    dockerhub_login('docker-hub-creds')
-                }
-            }
-        }
-        stage('Build') {
-            steps {
-                echo 'This is build stage'
-                sh "docker build -t ebadarshad/school-frontend:${env.IMAGE_TAG} ./frontend"
-                sh "docker build -t ebadarshad/school-backend:${env.IMAGE_TAG} ./backend"
-                echo 'Build images successful'
-            }
-        }
-        stage('Security Scan with Trivy') {
-            steps {
-                sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --format json -o trivy-report.json ebadarshad/school-frontend:${env.IMAGE_TAG}"
-                sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --format json -o trivy-report.json ebadarshad/school-backend:${env.IMAGE_TAG}"
-                archiveArtifacts artifacts: 'trivy-report.json', fingerprint: true
-            }
-        }
-        stage('Push image to DockerHub') {
-            steps {
-                echo 'This is Dockerhub image push stage'
-                sh "docker push ebadarshad/school-frontend:${env.IMAGE_TAG}"
-                sh "docker push ebadarshad/school-backend:${env.IMAGE_TAG}"
-                echo 'Pushed image to Dockerhub'
-            }
-        }
+        //             // Store in environment variable
+        //             env.IMAGE_TAG = imageTag.toString()
+        //         }
+        //     }
+        // }
+        // stage('Clone') {
+        //     steps {
+        //         script {
+        //             clone('https://github.com/ebad-arshad/MERN-School-Management-System', 'main')
+        //         }
+        //     }
+        // }
+        // stage('Login DockerHub') {
+        //     steps {
+        //         script {
+        //             dockerhub_login('docker-hub-creds')
+        //         }
+        //     }
+        // }
+        // stage('Build') {
+        //     steps {
+        //         echo 'This is build stage'
+        //         sh "docker build -t ebadarshad/school-frontend:${env.IMAGE_TAG} ./frontend"
+        //         sh "docker build -t ebadarshad/school-backend:${env.IMAGE_TAG} ./backend"
+        //         echo 'Build images successful'
+        //     }
+        // }
+        // stage('Security Scan with Trivy') {
+        //     steps {
+        //         sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --format json -o trivy-report.json ebadarshad/school-frontend:${env.IMAGE_TAG}"
+        //         sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --format json -o trivy-report.json ebadarshad/school-backend:${env.IMAGE_TAG}"
+        //         archiveArtifacts artifacts: 'trivy-report.json', fingerprint: true
+        //     }
+        // }
+        // stage('Push image to DockerHub') {
+        //     steps {
+        //         echo 'This is Dockerhub image push stage'
+        //         sh "docker push ebadarshad/school-frontend:${env.IMAGE_TAG}"
+        //         sh "docker push ebadarshad/school-backend:${env.IMAGE_TAG}"
+        //         echo 'Pushed image to Dockerhub'
+        //     }
+        // }
         stage('Deploy') {
             steps {
-                echo 'This is deploy stage'
+                // echo 'This is deploy stage'
                 // sh 'docker compose down'
                 // sh "APP_VERSION=${env.IMAGE_TAG} docker compose up --build -d"
                 sh """
                 cd ./k8s 
-                kubectl apply -f namespace.yaml --validate=false
-                kubectl apply -f secret.yaml --validate=false
-                kubectl apply -f pv.yaml --validate=false
-                kubectl apply -f pvc.yaml --validate=false
-                kubectl apply -f service.yaml --validate=false
-                kubectl apply -f hpa.yaml --validate=false
-                kubectl apply -f statefulset.yaml --validate=false
-                kubectl apply -f deployment.yaml --validate=false 
+                kubectl apply -f namespace.yaml
+                kubectl apply -f secret.yaml
+                kubectl apply -f pv.yaml
+                kubectl apply -f pvc.yaml
+                kubectl apply -f service.yaml
+                kubectl apply -f hpa.yaml
+                kubectl apply -f statefulset.yaml
+                kubectl apply -f deployment.yaml 
 
                 Thread.sleep(10000)
 
                 kubectl port-forward svc/school-frontend -n smp 80:80 --address=0.0.0.0 &               
                 """
-                echo "Deployed version: ${env.IMAGE_TAG}"
+                // echo "Deployed version: ${env.IMAGE_TAG}"
             }
         }
     }
