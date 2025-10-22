@@ -69,14 +69,14 @@ pipeline {
                 // sh "APP_VERSION=${env.IMAGE_TAG} docker compose up --build -d"
                 sh """
                 cd ./k8s 
-                kubectl apply -f namespace.yaml
-                kubectl apply -f secret.yaml
-                kubectl apply -f pv.yaml
-                kubectl apply -f pvc.yaml
-                kubectl apply -f service.yaml
-                kubectl apply -f hpa.yaml
-                kubectl apply -f statefulset.yaml
-                kubectl apply -f deployment.yaml 
+                kubectl apply -f namespace.yaml --validate=false
+                kubectl apply -f secret.yaml --validate=false
+                kubectl apply -f pv.yaml --validate=false
+                kubectl apply -f pvc.yaml --validate=false
+                kubectl apply -f service.yaml --validate=false
+                kubectl apply -f hpa.yaml --validate=false
+                kubectl apply -f statefulset.yaml --validate=false
+                kubectl apply -f deployment.yaml --validate=false 
 
                 Thread.sleep(10000)
 
