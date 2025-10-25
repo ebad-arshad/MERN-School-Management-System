@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 5000
 app.use(express.json({ limit: '10mb' }))
 app.use(cors())
 
-console.log(process.env.MONGO_URL)
 mongoose
     .connect(process.env.MONGO_URL, {
         useNewUrlParser: true,
