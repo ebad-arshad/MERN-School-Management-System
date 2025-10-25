@@ -4,7 +4,7 @@ metadata:
   name: school-frontend
   namespace: smp
   annotations:
-    argocd.argoproj.io/sync-wave: "7"
+    argocd.argoproj.io/sync-wave: "8"
   labels:
     app: school-frontend
 spec:
@@ -39,7 +39,7 @@ metadata:
   labels:
     app: school-backend
   annotations:
-    argocd.argoproj.io/sync-wave: "8"
+    argocd.argoproj.io/sync-wave: "9"
 spec:
   replicas: 1
   selector:

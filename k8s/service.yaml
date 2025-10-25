@@ -23,6 +23,8 @@ metadata:
   namespace: smp
   labels:
     app: school-backend
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
 spec:
   type: ClusterIP
   ports:
@@ -38,6 +40,8 @@ metadata:
   namespace: smp
   labels:
     app: mongo
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
 spec:
   clusterIP: None
   selector:
