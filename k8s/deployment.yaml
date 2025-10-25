@@ -3,6 +3,8 @@ kind: Deployment
 metadata:
   name: school-frontend
   namespace: smp
+  annotations:
+    argocd.argoproj.io/sync-wave: "7"
   labels:
     app: school-frontend
 spec:

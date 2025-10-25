@@ -3,6 +3,8 @@ kind: StatefulSet
 metadata:
   name: mongo
   namespace: smp
+  annotations:
+    argocd.argoproj.io/sync-wave: "6"
 spec:
   selector:
     matchLabels:
