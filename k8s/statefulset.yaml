@@ -25,27 +25,27 @@ spec:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
             secretKeyRef:
-                name: database
-                key: root_username
+              name: database
+              key: root_username
         - name: MONGO_INITDB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-                name: database
-                key: root_password
+              name: database
+              key: root_password
         - name: MONGO_INITDB_DATABASE
           valueFrom:
             secretKeyRef:
-                name: database
-                key: db
+              name: database
+              key: db
         volumeMounts:
         - name: mongo-storage
           mountPath: /data/db
         resources:
           requests:
-            memory: "64Mi"
+            memory: "512Mi"
             cpu: "250m"
           limits:
-            memory: "128Mi"
+            memory: "1Gi"
             cpu: "500m"
         livenessProbe:
           tcpSocket:
