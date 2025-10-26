@@ -76,7 +76,7 @@ pipeline {
                         sh """
                             git config user.email "m.ebadarshad2003@gmail.com"
                             git config user.name "ebad-arshad"
-                            git add k8s/
+                            git add .
                             git commit -m "ci: update image tags to ${env.IMAGE_TAG}"
                             git push https://${GIT_USER}:${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git HEAD:main
                         """
