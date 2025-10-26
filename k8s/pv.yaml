@@ -10,7 +10,7 @@ spec:
     storage: 1Gi
   accessModes:
     - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: manual
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: standard
   hostPath:
     path: "/mnt/data"
