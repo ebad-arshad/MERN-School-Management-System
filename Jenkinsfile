@@ -67,8 +67,8 @@ pipeline {
                 script {
                     // Update the image tags in deployment.yaml
                     sh """
-                        sed -i 's|ebadarshad/school-frontend:[0-9]*\\.[0-9]*\\.[0-9]*|ebadarshad/school-frontend:${env.IMAGE_TAG}|g' k8s/deployment.yaml
-                        sed -i 's|ebadarshad/school-backend:[0-9]*\\.[0-9]*\\.[0-9]*|ebadarshad/school-backend:${env.IMAGE_TAG}|g' k8s/deployment.yaml
+                        sed -i 's|ebadarshad/school-frontend:[^ ]*|ebadarshad/school-frontend:${env.IMAGE_TAG}|g' k8s/deployment.yaml
+                        sed -i 's|ebadarshad/school-backend:[^ ]*|ebadarshad/school-backend:${env.IMAGE_TAG}|g' k8s/deployment.yaml
                     """
                     
                     // Commit and push to GitHub
@@ -76,8 +76,14 @@ pipeline {
                         sh """
                             git config user.email "m.ebadarshad2003@gmail.com"
                             git config user.name "ebad-arshad"
-                            git add .
-                            git commit -m "ci: update image tags to ${env.IMAGE_TAG}"
+                            git add k8s/deployment.yaml
+                            if git diff --cached --quiet; then
+                                echo "No changes to commit"
+                            else
+                                git commit -m "ci: update image tags to ${env.IMAGE_TAG}"
+                                git push https://${GIT_USER}:${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git HEAD:main
+                            fi
+
                             git push https://${GIT_USER}:${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git HEAD:main
                         """
                     }
