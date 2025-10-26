@@ -62,12 +62,12 @@ pipeline {
                 echo 'Pushed image to Dockerhub'
             }
         }
-        stage('Deploy') {
-            steps {
-                echo 'This is deploy stage'
-                sh 'docker compose down'
-                sh "APP_VERSION=${env.IMAGE_TAG} docker compose up --build -d"
-                echo "Deployed version: ${env.IMAGE_TAG}"
+        // stage('Deploy') {
+        //     steps {
+        //         echo 'This is deploy stage'
+        //         sh 'docker compose down'
+        //         sh "APP_VERSION=${env.IMAGE_TAG} docker compose up --build -d"
+        //         echo "Deployed version: ${env.IMAGE_TAG}"
 
                 // sh """
                 // cd ./k8s 
@@ -84,7 +84,7 @@ pipeline {
 
                 // kubectl port-forward svc/school-frontend -n smp 80:80 --address=0.0.0.0 &               
                 // """
-            }
+            // }
         }
     }
 }

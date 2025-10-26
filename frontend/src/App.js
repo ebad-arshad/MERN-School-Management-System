@@ -11,6 +11,7 @@ import ChooseUser from './pages/ChooseUser';
 
 const App = () => {
   const { currentRole } = useSelector(state => state.user);
+  console.log("chl rha hai bhai")
 
   return (
     <Router>
