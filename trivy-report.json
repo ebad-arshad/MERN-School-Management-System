@@ -1,7 +1,7 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2025-10-27T01:16:49.756796404+05:00",
-  "ArtifactName": "ebadarshad/school-backend:0.17",
+  "CreatedAt": "2025-10-27T01:17:30.538799356+05:00",
+  "ArtifactName": "ebadarshad/school-backend:0.18",
   "ArtifactType": "container_image",
   "Metadata": {
     "Size": 198091264,
@@ -28,7 +28,8 @@
       "ebadarshad/school-backend:0.14",
       "ebadarshad/school-backend:0.15",
       "ebadarshad/school-backend:0.16",
-      "ebadarshad/school-backend:0.17"
+      "ebadarshad/school-backend:0.17",
+      "ebadarshad/school-backend:0.18"
     ],
     "RepoDigests": [
       "ebadarshad/school-backend@sha256:4cd2511674c615349476ec900c67ec9044083d89ba85d416cf81e85dde15878b"
@@ -191,7 +192,7 @@
   },
   "Results": [
     {
-      "Target": "ebadarshad/school-backend:0.17 (alpine 3.22.2)",
+      "Target": "ebadarshad/school-backend:0.18 (alpine 3.22.2)",
       "Class": "os-pkgs",
       "Type": "alpine",
       "Packages": [
