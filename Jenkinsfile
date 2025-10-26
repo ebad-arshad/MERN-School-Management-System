@@ -62,6 +62,28 @@ pipeline {
                 echo 'Pushed image to Dockerhub'
             }
         }
+        stage('Update K8s Manifests in GitHub') {
+            steps {
+                script {
+                    // Update the image tags in deployment.yaml
+                    sh """
+                        sed -i 's|ebadarshad/school-frontend:[0-9]*\\.[0-9]*\\.[0-9]*|ebadarshad/school-frontend:${env.IMAGE_TAG}|g' k8s/deployment.yaml
+                        sed -i 's|ebadarshad/school-backend:[0-9]*\\.[0-9]*\\.[0-9]*|ebadarshad/school-backend:${env.IMAGE_TAG}|g' k8s/deployment.yaml
+                    """
+                    
+                    // Commit and push to GitHub
+                    withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                        sh """
+                            git config user.email "m.ebadarshad2003@gmail.com"
+                            git config user.name "ebad-arshad"
+                            git add k8s/
+                            git commit -m "ci: update image tags to ${env.IMAGE_TAG}"
+                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git HEAD:main
+                        """
+                    }
+                }
+            }
+        }
         // stage('Deploy') {
         //     steps {
         //         echo 'This is deploy stage'
