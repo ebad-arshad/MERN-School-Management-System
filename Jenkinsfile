@@ -28,6 +28,8 @@ pipeline {
         stage('Clone') {
             steps {
                 script {
+                    sh "rm -rf main k8s"
+                    
                     clone('https://github.com/ebad-arshad/MERN-School-Management-System', 'main')
                     // git clone -b k8s https://github.com/ebad-arshad/MERN-School-Management-System main
 
