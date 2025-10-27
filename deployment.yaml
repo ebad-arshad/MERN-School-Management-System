@@ -13,6 +13,7 @@ metadata:
     app: school-frontend
 spec:
   replicas: 1
+  revisionHistoryLimit: 2  # ⬅️ ADD THIS - keeps only last 2 revisions
   selector:
     matchLabels:
       app: school-frontend
