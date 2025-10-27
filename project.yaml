@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: school-project
+  namespace: argocd
+spec:
+  sourceRepos:
+    - https://github.com/ebad-arshad/MERN-School-Management-System.git
+  destinations:
+    - namespace: smp
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
