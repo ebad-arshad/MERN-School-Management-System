@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: school-frontend
-        image: ebadarshad/school-frontend:0.46
+        image: ebadarshad/school-frontend:0.48
         ports:
         - containerPort: 80
         resources:
@@ -60,7 +60,7 @@ spec:
     spec:
       containers:
       - name: school-backend
-        image: ebadarshad/school-backend:0.46
+        image: ebadarshad/school-backend:0.48
         ports:
         - containerPort: 5000
         env:
