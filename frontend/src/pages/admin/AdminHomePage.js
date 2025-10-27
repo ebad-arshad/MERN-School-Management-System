@@ -31,9 +31,6 @@ const AdminHomePage = () => {
     const numberOfStudents = studentsList && studentsList.length;
     const numberOfClasses = sclassesList && sclassesList.length;
     const numberOfTeachers = teachersList && teachersList.length;
-    console.log("Students:", numberOfStudents);
-    console.log("Classes:", numberOfClasses);
-    console.log("Teachers:", numberOfTeachers);
 
     return (
         <>
