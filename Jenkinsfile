@@ -29,6 +29,10 @@ pipeline {
             steps {
                 script {
                     clone('https://github.com/ebad-arshad/MERN-School-Management-System', 'main')
+                    // git clone -b k8s https://github.com/ebad-arshad/MERN-School-Management-System main
+
+                    clone('https://github.com/ebad-arshad/MERN-School-Management-System', 'k8s')
+                    // git clone -b k8s https://github.com/ebad-arshad/MERN-School-Management-System k8s
                 }
             }
         }
@@ -42,8 +46,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'This is build stage'
-                sh "docker build -t ebadarshad/school-frontend:${env.IMAGE_TAG} ./frontend"
-                sh "docker build -t ebadarshad/school-backend:${env.IMAGE_TAG} ./backend"
+                sh "docker build -t ebadarshad/school-frontend:${env.IMAGE_TAG} main/frontend"
+                sh "docker build -t ebadarshad/school-backend:${env.IMAGE_TAG} main/backend"
                 echo 'Build images successful'
             }
         }
@@ -65,26 +69,23 @@ pipeline {
         stage('Update K8s Manifests in GitHub') {
             steps {
                 script {
-                    // Update the image tags in deployment.yaml
-                    sh """
-                        sed -i 's|ebadarshad/school-frontend:[^ ]*|ebadarshad/school-frontend:${env.IMAGE_TAG}|g' k8s/deployment.yaml
-                        sed -i 's|ebadarshad/school-backend:[^ ]*|ebadarshad/school-backend:${env.IMAGE_TAG}|g' k8s/deployment.yaml
-                    """
                     
                     // Commit and push to GitHub
                     withCredentials([usernamePassword(credentialsId: 'github-creds', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
                         sh """
                             git config user.email "m.ebadarshad2003@gmail.com"
                             git config user.name "ebad-arshad"
-                            git add k8s/deployment.yaml
-                            if git diff --cached --quiet; then
+                            cd k8s
+                            git checkout k8s
+                            sed -i 's|ebadarshad/school-frontend:[^ ]*|ebadarshad/school-frontend:${env.IMAGE_TAG}|g' deployment.yaml
+                            sed -i 's|ebadarshad/school-backend:[^ ]*|ebadarshad/school-backend:${env.IMAGE_TAG}|g' deployment.yaml
+                            git add deployment.yaml
+                            if git diff HEAD~1 HEAD; then
                                 echo "No changes to commit"
                             else
                                 git commit -m "ci: update image tags to ${env.IMAGE_TAG}"
-                                git push https://${GIT_USER}:${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git HEAD:main
+                                git push https://${GIT_USER}:${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git HEAD:k8s
                             fi
-
-                            git push https://${GIT_USER}:${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git HEAD:main
                         """
                     }
                 }
