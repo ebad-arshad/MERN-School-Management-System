@@ -51,6 +51,7 @@ metadata:
     argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-image-updater-git-creds
 spec:
   replicas: 1
+  revisionHistoryLimit: 2  # ⬅️ ADD THIS - keeps only last 2 revisions
   selector:
     matchLabels:
       app: school-backend
