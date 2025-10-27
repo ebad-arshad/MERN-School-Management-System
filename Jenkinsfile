@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     sh "rm -rf main k8s"
-                    
+
                     clone('https://github.com/ebad-arshad/MERN-School-Management-System', 'main')
                     // git clone -b k8s https://github.com/ebad-arshad/MERN-School-Management-System main
 
@@ -78,15 +78,14 @@ pipeline {
                             git config user.email "m.ebadarshad2003@gmail.com"
                             git config user.name "ebad-arshad"
                             cd k8s
-                            git checkout k8s
                             sed -i 's|ebadarshad/school-frontend:[^ ]*|ebadarshad/school-frontend:${env.IMAGE_TAG}|g' deployment.yaml
                             sed -i 's|ebadarshad/school-backend:[^ ]*|ebadarshad/school-backend:${env.IMAGE_TAG}|g' deployment.yaml
                             git add deployment.yaml
-                            if git diff HEAD~1 HEAD; then
+                            if git diff --cached --quiet; then
                                 echo "No changes to commit"
                             else
                                 git commit -m "ci: update image tags to ${env.IMAGE_TAG}"
-                                git push https://${GIT_USER}:${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git HEAD:k8s
+                                git push https://${GIT_TOKEN}@github.com/ebad-arshad/MERN-School-Management-System.git
                             fi
                         """
                     }
