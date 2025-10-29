@@ -5,15 +5,11 @@ metadata:
   namespace: smp
   annotations:
     argocd.argoproj.io/sync-wave: "8"
-    argocd-image-updater.argoproj.io/image-list: school-frontend=ebadarshad/school-frontend
-    argocd-image-updater.argoproj.io/school-frontend.semver-constraint: ">=0.08"
-    argocd-image-updater.argoproj.io/school-frontend.update-strategy: semver
-    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-image-updater-git-creds
   labels:
     app: school-frontend
 spec:
   replicas: 1
-  revisionHistoryLimit: 2  # ⬅️ ADD THIS - keeps only last 2 revisions
+  revisionHistoryLimit: 2  # ⬅️ ADD THIS - keeps only last 2 revisions in argocd 
   selector:
     matchLabels:
       app: school-frontend
@@ -45,13 +41,9 @@ metadata:
     app: school-backend
   annotations:
     argocd.argoproj.io/sync-wave: "9"
-    argocd-image-updater.argoproj.io/image-list: school-backend=ebadarshad/school-backend
-    argocd-image-updater.argoproj.io/school-backend.semver-constraint: ">=0.08"
-    argocd-image-updater.argoproj.io/school-frontend.update-strategy: semver
-    argocd-image-updater.argoproj.io/write-back-method: git:secret:argocd/argocd-image-updater-git-creds
 spec:
   replicas: 1
-  revisionHistoryLimit: 2  # ⬅️ ADD THIS - keeps only last 2 revisions
+  revisionHistoryLimit: 2  # ⬅️ ADD THIS - keeps only last 2 revisions in argocd 
   selector:
     matchLabels:
       app: school-backend
